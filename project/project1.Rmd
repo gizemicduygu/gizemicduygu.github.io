@@ -1,0 +1,122 @@
+---
+title: "Project#1"
+author: "Gizem Icduygu"
+date: "2020-10-19"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+##### Both data sets were obtained from the Texas Education Agency. The first data set titled "SAT" is made up of all the SAT scores obtained from high school students. It is arranged by ethnicity, district, region, and whether or not the student passed the critical point determined by the SAT agency. The second set of data titled "District" is all the disciplanary actions taken within district number 13, which includes all of Austin ISD, and a couple of charter/private schools within the district. 
+
+##### These sets of data were chosen to see whether or not the SAT scores and the disciplinary action taken towards students depend on the district these students are taught in. Unfortunately, it is a known fact that students in low-income districts tend to have higher rates of disciplinary action, along with lower academic performances. This data is observed to hopefully make a connection between the SAT scores and disciplary actions of certian districts and work towards bettering SAT scores, and therefore increasing college attention, while decreasing disciplinary action. 
+
+
+```{R}
+library("tidyverse")
+library(readxl)
+district13 <- read_excel("~/SAT_District_Data_Class_2018 (1) (2).xlsx")
+SATscores <- read_csv("~/REGION_13_DISTRICT_summary_20 (1).csv")
+glimpse(district13)
+glimpse(SATscores)
+```
+
+## Tidying:Rearranging Wide/Long
+
+##### In order to tidy up the data sets, certain columns were removed and renamed to fit the overall data. All the rows that didn't contain a value were removed. In addition, the ethnicity column was pivoted wider to have each ethnicity be it's own column.  
+
+```{R}
+district13 <- district13 %>% filter(Region == 13) %>% na.omit() 
+SATscores1 <- SATscores %>% filter(REGION == 13) %>% na.omit()
+names(district13)[names(district13) == "District"] <- "DISTRICT"
+project <- merge(SATscores1, district13, by="DISTRICT", all = TRUE)
+newproject <- project %>% na.omit()
+```
+
+## Joining/Merging 
+
+##### Both the district and the SATscores1 datasets were joined by the use of merge, and they were merged together on the basis of district names. As mentioned above, certain columns were removed from the dataset because of their irrelevance. Before the merging, both data sets were edited on Excel so that all the district names were capitalized since R was not able to understand that the uncapitalized and capitalized versions of the district names were the same.   
+
+```{R}
+newproject <- project %>% select(-c(YR20, HEADING, SECTION, `AGGREGATION LEVEL`, ERW)) %>%   na.omit()
+```
+
+
+## Wrangling
+
+##### As seen by the data below, Hispanic students scored the majority of the lowest total SAT scores, while white students had the highest SAT scores. Each of these ethnicities were also divided into whether or not these children had any disabilities, and were economically disadvantaged or not. Going along with the scores, students who scored high on the math portion of the SAT's usually ended up scoring high on the reading portions as well, overall giving them a higher total SAT score. 
+
+
+```{R}
+newproject1 <- newproject %>% select(-c(REGION, DISTRICT, CHARTER_STATUS)) %>% distinct()
+names(newproject1)[names(newproject1) == "Group"] <- "Ethnicity"
+newproject1 %>% group_by(Ethnicity)
+sat <- newproject1 %>% arrange(Total, desc()) 
+sat$Total <- as.numeric(sat$Total)
+sat$Math <- as.numeric(sat$Math)
+sat$reading <- (sat$Total - sat$Math)
+glimpse(sat %>% mutate(reading = Total-Math))
+
+newsat <- sat %>% pivot_wider(names_from = Ethnicity)
+
+sat %>% summarise(mean(Math))
+sat %>% summarise(mean(Total))
+sat %>% summarise(mean(reading))
+groupt <- sat %>% select(Ethnicity, Total)
+groupm <- sat %>% select(Ethnicity, Math)
+groupr <- sat %>% select(Ethnicity, reading)
+sat %>% summarise(sd(Total))
+sat %>% summarise(sd(Math))
+sat %>% summarise(sd(reading))
+sat %>% select()
+```
+
+## Plots
+##### As seen below in the heat correlation map, there is a very low correlation between reading and math SAT scores taken by all students. This could mean that there is no relationship between how a student scores on one portion of the SAT versus the other. There is an expected correlation between the scores for both sections of the SAT and the total score because the total is made up of the combination of the multiple sections. 
+```{R}
+cormat <- sat %>% select_if(is.numeric) %>% cor(use="pair")
+tidycor <- cormat %>% as.data.frame %>% rownames_to_column("Variation1") %>%    pivot_longer(-1,names_to="Variation2",values_to="correlation")
+library("ggplot2")
+tidycor %>%ggplot(aes(Variation1,Variation2,fill=correlation)) + geom_tile()
+
+new <- sat %>% filter(Ethnicity == "Economically Disadvantaged")
+old <- sat %>% filter(Ethnicity == "Not Economically Disadvantaged")
+plot <- merge(new,old, by="Ethnicity")
+clean <- groupm %>% unique() %>% select()
+
+ggplot(data = new, aes(x=Ethnicity, y=Math, color=DISTNAME)) + geom_boxplot() + ggtitle("Distibution of SAT Math Scores Among Economically Disadvantaged Districts") + xlab("Economic Standing") + ylab("SAT Math Scores") + theme_dark()
+
+
+ggplot(data = old, aes(x=Ethnicity, y=Math, color=DISTNAME)) + geom_boxplot(aes(color=DISTNAME)) + theme(legend.position = 'none') + ggtitle("Distiribution of SAT Math Scores Among Non-Economically Disadvantaged Districts") + xlab("Economic Standing") + ylab("SAT Math Scores") + scale_y_continuous(breaks=seq(0,700,100))
+```
+
+##### In the boxplots for both types of economic standings in different districts, it can be seen that the students who are not economically disadvantaged had an overall higher score for the math portion of the SATs. This is an expected result because it is assumed that students who have the finacial means will have more resources available to them to score better while students who are less fortunate will not have the same resources in order to succeed. There are also less districts listed under not economiclly disadvantages, which is not a good sign for the Texas Education region 13. It means that there is a larger portion of students who are not getting the education they need due to the simple reason of being in the wrong place. Based on this type of data, in order to provide the same quality of education throughout the state of Texas, every single resource needs to be made available to have students on the same playing field, otherwise it is setting up lower income students for failure. 
+
+## Dimensionality Reduction
+
+##### Once the cluster plots were made, it can be seen that there is no relationship between the three categories, but they are very similar in their composition. The pam1 plot showed an average silhouette width of 0.71, which indicates a strong structure between the three numeric variables. In addition, math and reading portions of the SAT had highest value of correlation, meaning that they are the most closely related. 
+
+
+
+```{r}
+library("GGally")
+library("cluster")
+set.seed(348)
+kmeans1 <- sat %>% select(Total, Math, reading) %>% kmeans(4) 
+kmeans1$size
+kmeans1$centers
+kmeansclust <- sat %>% mutate(cluster=as.factor(kmeans1$cluster))
+kmeansclust %>% ggplot(aes(Total, Math, reading, color=cluster)) + geom_point()
+half <- sat %>% slice(1:500)
+pam1 <- half %>% select(Total, Math, reading) %>% scale() %>% pam(k=4) 
+half %>% mutate(cluster=as.factor(pam1$clustering)) %>% 
+  ggpairs(columns = c("Total", "Math", "reading"), aes(color=cluster))
+plot(pam1, k=2)
+```
+

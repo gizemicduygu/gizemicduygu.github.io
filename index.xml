@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gizem Icduygu</title>
+    <link>/</link>
+    <description>Recent content on Gizem Icduygu</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Thu, 10 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python and R </title>
+      <link>/post/2020/12/10/python/</link>
+      <pubDate>Thu, 10 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2020/12/10/python/</guid>
+      <description>Introduction Do you dream in codes? Do you ever think about making math harder than it needs to be? Then this post is the right one for you!
+In this post, I&#39;ll be showing a couple of ways to do simple arithmetic in python and R but with a twist.
+ Yay Math As a refresher, here are some examples of how to run some basic codes:
+2+2 ## [1] 4 4*67899 ## [1] 271596 2347891234/23 ## [1] 102082228 But why would you want to settle for numbers when you can write everything out?</description>
+    </item>
+    
+    <item>
+      <title>Project#2</title>
+      <link>/project/project2/</link>
+      <pubDate>Mon, 23 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project2/</guid>
+      <description>Introduction This data set studies the 12 types of rice and how 6 different types of chemical treatments effect their dry root and shoot masses. 6 of the rice types are wild type and 6 are genetically modified, which are abbreviated as &amp;quot;wt&amp;quot; and ANU843&amp;quot; respectively. In this study, a treatment is given with a specific type of fertilizer that is either the same composition as the treatment or a combination of them.</description>
+    </item>
+    
+    <item>
+      <title>Project#1</title>
+      <link>/project/project1/</link>
+      <pubDate>Mon, 19 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project1/</guid>
+      <description>Introduction Both data sets were obtained from the Texas Education Agency. The first data set titled &amp;quot;SAT&amp;quot; is made up of all the SAT scores obtained from high school students. It is arranged by ethnicity, district, region, and whether or not the student passed the critical point determined by the SAT agency. The second set of data titled &amp;quot;District&amp;quot; is all the disciplanary actions taken within district number 13, which includes all of Austin ISD, and a couple of charter/private schools within the district.</description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>/projects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/</guid>
+      <description> Check out some of my coding projects below:
+ Wrangling &amp;amp; Exploratory Data Analysis
+ Modeling, Inference, Prediction
+  -- </description>
+    </item>
+    
+  </channel>
+</rss>

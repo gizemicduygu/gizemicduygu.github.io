@@ -1,0 +1,49 @@
+---
+title: 'Python and R '
+author: ''
+date: '2020-12-10'
+slug: python
+categories: []
+tags: []
+description: ''
+---
+![](/post/2020-12-10-python_files/Funny-Math-Jokes-1 (1).jpg)
+
+##Introduction 
+
+Do you dream in codes? Do you ever think about making math harder than it needs to be? Then this post is the right one for you! 
+
+In this post, I'll be showing a couple of ways to do simple arithmetic in python and R but with a twist.
+
+
+##Yay Math 
+
+As a refresher, here are some examples of how to run some basic codes:
+
+```{R}
+2+2
+4*67899
+2347891234/23
+```
+
+
+But why would you want to settle for numbers when you can write everything out? Here is an example in R:
+
+```{R}
+twothousand <- c(2000)
+fivethousandsixhundred <- c(5600)
+twothousand*fivethousandsixhundred
+twothousand/fivethousandsixhundred
+(2*twothousand) - (5*fivethousandsixhundred)/2
+```
+
+And because R isn't enough, here it is in python: 
+```{python}
+three = 3
+two = 2
+three + two 
+mygod = 123423342424
+ohno = 12323434723843984
+mygod + ohno
+```
+

@@ -1,0 +1,178 @@
+---
+title: "Project#2"
+author: "Gizem Icduygu"
+date: "2020-11-23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction 
+
+This data set studies the 12 types of rice and how 6 different types of chemical treatments effect their dry root and shoot masses. 6 of the rice types are wild type and 6 are genetically modified, which are abbreviated as "wt" and ANU843" respectively. In this study, a treatment is given with a specific type of fertilizer that is either the same composition as the treatment or a combination of them. There are a total of 72 observations and each of the 12 plants are tested 6 times. 
+
+```{r}
+library("tidyverse")
+library("ggplot2")
+library("DAAG")
+data(rice)
+```
+
+## Manova Testing 
+
+  As seen below, a one-way MANOVA was conducted to determine the effect of the six types of chemical treatments (F10, NH4Cl, NH4NO3, F10+ANU843, NH4Cl+ANU843, NH4NO3+ANU843) on the two dependent variables, dry root mass and dry shoot mass. 
+  The co-variance matrices for each group showed relative homogeneity and no univariate or multivariate outliers, therefore the MANOVA test is considered to be an appropriate analysis technique. Among the six different chemical treatments, all of them were determined to cause significant differences among the dry root and shoot masses. In order to further this data, univariate ANOVAs for each dependent variable were conducted as follow-up tests to the MANOVA, which were significant. 
+  Post hoc analysis was performed conducting pairwise comparisons to determine which treatments differed in dry root and shoot masses. All of the six treatments were found to differ significantly from each other, where the Pillai trace = 1.4061 and the p-value is less than 2.2e-16. 
+
+```{R}
+library(rstatix)
+group <-  rice$trt
+DVs <- rice %>% select(RootDryMass, ShootDryMass)
+sapply(split(DVs,group), mshapiro_test)
+lapply(split(DVs,group), cov)
+test1 <-manova(cbind(RootDryMass,ShootDryMass)~trt, data=rice)
+summary(test1)
+summary.aov(test1) 
+pairwise.t.test(rice$RootDryMass, rice$trt, p.adj = "none")
+pairwise.t.test(rice$ShootDryMass, rice$trt, p.adj = "none")
+```
+## Randomization Test 
+  For this data set, the null hypothesis is that the mean mass of wild type rice and genetically modified rice will be the same. The alternative hypothesis is that the mean mass of both varieties of rice  will vary. As seen in the histogram, the genetically modified rice tend to have higher masses than the wild type rice.   
+
+```{R}
+rice%>%group_by(variety)%>%summarize(s=sd(RootDryMass))%>%summarize(diff(s))
+rand_dist<-vector()
+for(i in 1:5000){
+new<-data.frame(mass=sample(rice$RootDryMass),var=rice$variety)
+rand_dist[i]<-sd(new[new$var=="wt",]$mass)-
+sd(new[new$var=="ANU843",]$mass)
+}
+mean(rand_dist < -13.24057 | rand_dist > 13.24057 )
+ggplot(new,aes(mass,fill=var))+geom_histogram()+facet_wrap(~var,ncol=2)
+```
+## Linear Regression Model 
+
+  For the dry root mass of the samples, all the chemical treatments show to have a significant effect on the plant masses since all the p-values are less than 0.05. The same can be said for the dry shoot masses as well since all the calculated p-values are also less than 0.05. Assumptions of linearity, normality, and homoskedacticity are met. There weren't any significant results observed after the robust SE was performed. This model accounts for about 0.8493929 of the original data.  
+```{R}
+library("interactions")
+library("sandwich")
+library("lmtest")
+rice$RDM <- rice$RootDryMass - mean(rice$RootDryMass)
+fit1<-lm(RDM~trt+fert, data= rice)
+summary(fit1)
+resids<-fit1$residuals
+fitvals<-fit1$fitted.values
+ks.test(resids, "pnorm", mean=0, sd(resids)) 
+rice%>%ggplot(aes(trt,RDM))+geom_point()+geom_smooth(method = 'lm')
+coeftest(fit1, vcov=vcovHC(fit1))[,1:2]
+(sum((rice$RootDryMass-mean(rice$RootDryMass))^2)-sum(fit1$residuals^2))/sum((rice$RootDryMass-mean(rice$RootDryMass))^2)
+```
+## Bootstrapped Standard Errors 
+
+There weren't any major changes observed in the standard error values or p-values after bootstrapped standard errors were computed. 
+```{R}
+rice$RDM <- rice$RootDryMass - mean(rice$RootDryMass)
+fit1<-lm(RDM~trt+fert, data= rice)
+summary(fit1)
+boot_dat<- sample_frac(rice, replace=T)
+samp_distn<-replicate(5000, {
+boot_dat <- sample_frac(rice, replace=T) 
+fit1 <- lm(RDM~trt+fert, data=boot_dat) 
+coef(fit1) 
+})
+samp_distn %>% t %>% as.data.frame %>% summarize_all(sd)
+anova(fit1)
+```
+## Logistic Regression Model Predicting a Binary Variable
+
+After the logistic regression model is conducted, it can be seen that the mass of the roots has a significant relationship with the variety of rice, while mass of shoots didn't. The calculated AUC was 0.8375772, which shows that the logistic regression model created is a good representation of the original data. 
+
+```{R}
+fit<-glm(variety~RootDryMass,data=rice,family=binomial(link="logit"))
+coeftest(fit)
+exp(coef(fit))
+rice$prob<-predict(fit,type="response")
+table(truth=rice$variety, prediction=rice$prob)%>%addmargins
+rice$logodds <-predict(fit, type= "link")
+ggplot(rice, aes(x=logodds, fill=variety)) + geom_density() 
+library(plotROC)
+ROCplot<-ggplot(rice)+geom_roc(aes(d=variety,m=RootDryMass))
+ROCplot
+calc_auc(ROCplot)
+```
+## Logistic Regression
+
+The calculated AUC for all the response variables is 0.7959105, which means that the precision dropped from the earlier logistic regression model. After the lasso method was perfomed, the only variables determined to be relevant were root dry mass, trtNH4Cl, trtNH4NO3, trtF10+ANU843, trtNH4Cl +ANU843, and trtNH4NO3+ ANU843. 
+
+```{R}
+library("tidyverse")
+library(lmtest)
+library("pROC")
+library("plotROC")
+data(rice)
+fit<-glm(variety~(.), data=rice,family=binomial(link="logit"))
+coeftest(fit)
+exp(coef(fit))
+rice$prob<-predict(fit,type="response")
+table(truth=rice$variety, prediction=rice$prob)%>%addmargins
+rice<-rice%>%mutate(y=ifelse(variety=="wt",1,0))
+ROCplot<-ggplot(rice)+geom_roc(aes(d=y,m=RootDryMass+ShootDryMass))
+ROCplot
+calc_auc(ROCplot)
+
+fit <- glm(y~(.),data=rice,family="binomial")
+prob <- predict(fit,type="response")
+truth <- rice$variety
+
+class_diag <- function(probs,truth){
+tab<-table(factor(probs>.5,levels=c("FALSE","TRUE")),truth)
+acc=sum(diag(tab))/sum(tab)
+sens=tab[2,2]/colSums(tab)[2]
+spec=tab[1,1]/colSums(tab)[1]
+ppv=tab[2,2]/rowSums(tab)[2]
+f1=2*(sens*ppv)/(sens+ppv)}
+
+
+if(is.numeric(truth)==FALSE & is.logical(truth)==FALSE) truth<-as.numeric(truth)-1
+
+
+data(rice)
+set.seed(1234)
+k=10 
+
+data<-rice[sample(nrow(rice)),] 
+folds<-cut(seq(1:nrow(rice)),breaks=k,labels=F) 
+diags<-NULL
+for(i in 1:k){
+  train<-data[folds!=i,]
+  test<-data[folds==i,]
+  truth<-test$variety 
+  fit<-glm(variety~(.), data=train, family = "binomial")
+  probs<-predict(fit,newdata = test,type="response")
+  diags<-rbind(diags,class_diag(probs,truth))
+}
+
+library(glmnet)
+data(rice)
+y<-as.matrix(rice$variety) 
+x<-model.matrix(variety~.,data=rice)[,-1]
+cv<-cv.glmnet(x,y,family="binomial")
+lasso<-glmnet(x,y,family="binomial",lambda=cv$lambda.1se)
+coef(lasso)
+
+set.seed(1234)
+k=10 
+data<-rice[sample(nrow(rice)),] 
+folds<-cut(seq(1:nrow(rice)),breaks=k,labels=F) 
+diags<-NULL
+for(i in 1:k){
+  train<-data[folds!=i,]
+  test<-data[folds==i,]
+  truth<-test$variety
+  fit<-glm(variety~ShootDryMass*RootDryMass, data=rice, family = "binomial")
+  probs<-predict(fit,newdata = test,type="response")
+  diags<-rbind(diags,class_diag(probs,truth))
+}
+```

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects on Gizem Icduygu</title>
+    <link>/project/</link>
+    <description>Recent content in Projects on Gizem Icduygu</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Mon, 23 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="/project/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Project#2</title>
+      <link>/project/project2/</link>
+      <pubDate>Mon, 23 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project2/</guid>
+      <description>Introduction This data set studies the 12 types of rice and how 6 different types of chemical treatments effect their dry root and shoot masses. 6 of the rice types are wild type and 6 are genetically modified, which are abbreviated as &amp;quot;wt&amp;quot; and ANU843&amp;quot; respectively. In this study, a treatment is given with a specific type of fertilizer that is either the same composition as the treatment or a combination of them.</description>
+    </item>
+    
+    <item>
+      <title>Project#1</title>
+      <link>/project/project1/</link>
+      <pubDate>Mon, 19 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project1/</guid>
+      <description>Introduction Both data sets were obtained from the Texas Education Agency. The first data set titled &amp;quot;SAT&amp;quot; is made up of all the SAT scores obtained from high school students. It is arranged by ethnicity, district, region, and whether or not the student passed the critical point determined by the SAT agency. The second set of data titled &amp;quot;District&amp;quot; is all the disciplanary actions taken within district number 13, which includes all of Austin ISD, and a couple of charter/private schools within the district.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Gizem Icduygu" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
+    <title>Project#1</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../post/">BLOG</a></li>
+        
+        <li><a href="../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../project/project1/">Project#1</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         October 19, 2020 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<div id="both-data-sets-were-obtained-from-the-texas-education-agency.-the-first-data-set-titled-sat-is-made-up-of-all-the-sat-scores-obtained-from-high-school-students.-it-is-arranged-by-ethnicity-district-region-and-whether-or-not-the-student-passed-the-critical-point-determined-by-the-sat-agency.-the-second-set-of-data-titled-district-is-all-the-disciplanary-actions-taken-within-district-number-13-which-includes-all-of-austin-isd-and-a-couple-of-charterprivate-schools-within-the-district." class="section level5">
+<h5>Both data sets were obtained from the Texas Education Agency. The first data set titled &quot;SAT&quot; is made up of all the SAT scores obtained from high school students. It is arranged by ethnicity, district, region, and whether or not the student passed the critical point determined by the SAT agency. The second set of data titled &quot;District&quot; is all the disciplanary actions taken within district number 13, which includes all of Austin ISD, and a couple of charter/private schools within the district.</h5>
+</div>
+<div id="these-sets-of-data-were-chosen-to-see-whether-or-not-the-sat-scores-and-the-disciplinary-action-taken-towards-students-depend-on-the-district-these-students-are-taught-in.-unfortunately-it-is-a-known-fact-that-students-in-low-income-districts-tend-to-have-higher-rates-of-disciplinary-action-along-with-lower-academic-performances.-this-data-is-observed-to-hopefully-make-a-connection-between-the-sat-scores-and-disciplary-actions-of-certian-districts-and-work-towards-bettering-sat-scores-and-therefore-increasing-college-attention-while-decreasing-disciplinary-action." class="section level5">
+<h5>These sets of data were chosen to see whether or not the SAT scores and the disciplinary action taken towards students depend on the district these students are taught in. Unfortunately, it is a known fact that students in low-income districts tend to have higher rates of disciplinary action, along with lower academic performances. This data is observed to hopefully make a connection between the SAT scores and disciplary actions of certian districts and work towards bettering SAT scores, and therefore increasing college attention, while decreasing disciplinary action.</h5>
+<pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
+<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.1
+## ✓ tidyr   1.1.1     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(readxl)
+district13 &lt;- read_excel(&quot;~/SAT_District_Data_Class_2018 (1) (2).xlsx&quot;)
+SATscores &lt;- read_csv(&quot;~/REGION_13_DISTRICT_summary_20 (1).csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   `AGGREGATION LEVEL` = col_character(),
+##   REGION = col_double(),
+##   DISTNAME = col_character(),
+##   DISTRICT = col_double(),
+##   CHARTER_STATUS = col_character(),
+##   SECTION = col_character(),
+##   HEADING = col_character(),
+##   `HEADING NAME` = col_character(),
+##   YR20 = col_double()
+## )</code></pre>
+<pre class="r"><code>glimpse(district13)</code></pre>
+<pre><code>## Rows: 54,756
+## Columns: 17
+## $ Group               &lt;chr&gt; &quot;All Students&quot;, &quot;African American&quot;, &quot;American Ind…
+## $ District            &lt;chr&gt; &quot;001902&quot;, &quot;001902&quot;, &quot;001902&quot;, &quot;001902&quot;, &quot;001902&quot;,…
+## $ DistName            &lt;chr&gt; &quot;Cayuga ISD&quot;, &quot;Cayuga ISD&quot;, &quot;Cayuga ISD&quot;, &quot;Cayuga…
+## $ County              &lt;chr&gt; &quot;001&quot;, &quot;001&quot;, &quot;001&quot;, &quot;001&quot;, &quot;001&quot;, &quot;001&quot;, &quot;001&quot;, …
+## $ CntyName            &lt;chr&gt; &quot;Anderson County&quot;, &quot;Anderson County&quot;, &quot;Anderson C…
+## $ Region              &lt;chr&gt; &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;07&quot;, &quot;…
+## $ RegnName            &lt;chr&gt; &quot;Kilgore&quot;, &quot;Kilgore&quot;, &quot;Kilgore&quot;, &quot;Kilgore&quot;, &quot;Kilg…
+## $ ERW                 &lt;chr&gt; &quot;569&quot;, NA, NA, &quot;560&quot;, NA, NA, &quot;570&quot;, NA, NA, &quot;508…
+## $ Math                &lt;chr&gt; &quot;540&quot;, NA, NA, &quot;555&quot;, NA, NA, &quot;538&quot;, NA, NA, &quot;505…
+## $ Total               &lt;chr&gt; &quot;1109&quot;, NA, NA, &quot;1115&quot;, NA, NA, &quot;1108&quot;, NA, NA, &quot;…
+## $ Grads_Mskd          &lt;chr&gt; &quot;&lt;50&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;50&quot;, …
+## $ Exnees_Mskd         &lt;chr&gt; &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, …
+## $ Part_Rate           &lt;chr&gt; &quot;35.9&quot;, NA, NA, &quot;66.7&quot;, NA, NA, &quot;37.5&quot;, NA, NA, &quot;…
+## $ Crit_Mskd           &lt;chr&gt; &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, …
+## $ Above_Crit_Rate     &lt;chr&gt; &quot;21.4&quot;, NA, NA, NA, NA, NA, &quot;25.0&quot;, NA, NA, NA, &quot;…
+## $ TSI_Both_Mskd       &lt;chr&gt; &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, …
+## $ Above_TSI_Both_Rate &lt;chr&gt; &quot;57.1&quot;, NA, NA, &quot;100&quot;, NA, NA, &quot;50.0&quot;, NA, NA, &quot;2…</code></pre>
+<pre class="r"><code>glimpse(SATscores)</code></pre>
+<pre><code>## Rows: 4,102
+## Columns: 9
+## $ `AGGREGATION LEVEL` &lt;chr&gt; &quot;DISTRICT SUMMARY&quot;, &quot;DISTRICT SUMMARY&quot;, &quot;DISTRICT…
+## $ REGION              &lt;dbl&gt; 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 1…
+## $ DISTNAME            &lt;chr&gt; &quot;AUSTIN ACHIEVE PUBLIC SCHOOLS&quot;, &quot;AUSTIN DISCOVER…
+## $ DISTRICT            &lt;dbl&gt; 227825, 227821, 227821, 227821, 227821, 227821, 2…
+## $ CHARTER_STATUS      &lt;chr&gt; &quot;OPEN ENROLLMENT CHARTER&quot;, &quot;OPEN ENROLLMENT CHART…
+## $ SECTION             &lt;chr&gt; &quot;A-PARTICIPATION&quot;, &quot;A-PARTICIPATION&quot;, &quot;A-PARTICIP…
+## $ HEADING             &lt;chr&gt; &quot;A01&quot;, &quot;A01&quot;, &quot;A02&quot;, &quot;A03&quot;, &quot;B10&quot;, &quot;B13&quot;, &quot;C24&quot;, …
+## $ `HEADING NAME`      &lt;chr&gt; &quot;DISTRICT CUMULATIVE YEAR END ENROLLMENT&quot;, &quot;DISTR…
+## $ YR20                &lt;dbl&gt; 2013, 479, 19, 24, 13, -999, -999, -999, -999, -9…</code></pre>
+</div>
+</div>
+<div id="tidyingrearranging-widelong" class="section level2">
+<h2>Tidying:Rearranging Wide/Long</h2>
+<div id="in-order-to-tidy-up-the-data-sets-certain-columns-were-removed-and-renamed-to-fit-the-overall-data.-all-the-rows-that-didnt-contain-a-value-were-removed.-in-addition-the-ethnicity-column-was-pivoted-wider-to-have-each-ethnicity-be-its-own-column." class="section level5">
+<h5>In order to tidy up the data sets, certain columns were removed and renamed to fit the overall data. All the rows that didn't contain a value were removed. In addition, the ethnicity column was pivoted wider to have each ethnicity be it's own column.</h5>
+<pre class="r"><code>district13 &lt;- district13 %&gt;% filter(Region == 13) %&gt;% na.omit() 
+SATscores1 &lt;- SATscores %&gt;% filter(REGION == 13) %&gt;% na.omit()
+names(district13)[names(district13) == &quot;District&quot;] &lt;- &quot;DISTRICT&quot;
+project &lt;- merge(SATscores1, district13, by=&quot;DISTRICT&quot;, all = TRUE)
+newproject &lt;- project %&gt;% na.omit()</code></pre>
+</div>
+</div>
+<div id="joiningmerging" class="section level2">
+<h2>Joining/Merging</h2>
+<div id="both-the-district-and-the-satscores1-datasets-were-joined-by-the-use-of-merge-and-they-were-merged-together-on-the-basis-of-district-names.-as-mentioned-above-certain-columns-were-removed-from-the-dataset-because-of-their-irrelevance.-before-the-merging-both-data-sets-were-edited-on-excel-so-that-all-the-district-names-were-capitalized-since-r-was-not-able-to-understand-that-the-uncapitalized-and-capitalized-versions-of-the-district-names-were-the-same." class="section level5">
+<h5>Both the district and the SATscores1 datasets were joined by the use of merge, and they were merged together on the basis of district names. As mentioned above, certain columns were removed from the dataset because of their irrelevance. Before the merging, both data sets were edited on Excel so that all the district names were capitalized since R was not able to understand that the uncapitalized and capitalized versions of the district names were the same.</h5>
+<pre class="r"><code>newproject &lt;- project %&gt;% select(-c(YR20, HEADING, SECTION, `AGGREGATION LEVEL`, ERW)) %&gt;%   na.omit()</code></pre>
+</div>
+</div>
+<div id="wrangling" class="section level2">
+<h2>Wrangling</h2>
+<div id="as-seen-by-the-data-below-hispanic-students-scored-the-majority-of-the-lowest-total-sat-scores-while-white-students-had-the-highest-sat-scores.-each-of-these-ethnicities-were-also-divided-into-whether-or-not-these-children-had-any-disabilities-and-were-economically-disadvantaged-or-not.-going-along-with-the-scores-students-who-scored-high-on-the-math-portion-of-the-sats-usually-ended-up-scoring-high-on-the-reading-portions-as-well-overall-giving-them-a-higher-total-sat-score." class="section level5">
+<h5>As seen by the data below, Hispanic students scored the majority of the lowest total SAT scores, while white students had the highest SAT scores. Each of these ethnicities were also divided into whether or not these children had any disabilities, and were economically disadvantaged or not. Going along with the scores, students who scored high on the math portion of the SAT's usually ended up scoring high on the reading portions as well, overall giving them a higher total SAT score.</h5>
+<pre class="r"><code>newproject1 &lt;- newproject %&gt;% select(-c(REGION, DISTRICT, CHARTER_STATUS)) %&gt;% distinct()
+names(newproject1)[names(newproject1) == &quot;Group&quot;] &lt;- &quot;Ethnicity&quot;
+newproject1 %&gt;% group_by(Ethnicity)</code></pre>
+<pre><code>## # A tibble: 56,921 x 17
+## # Groups:   Ethnicity [36]
+##    DISTNAME `HEADING NAME` Ethnicity DistName County CntyName Region RegnName
+##    &lt;chr&gt;    &lt;chr&gt;          &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;   
+##  1 KATHERI… SPEC. ED. STU… Not Home… Katheri… 105    Hays Co… 13     Austin  
+##  2 KATHERI… SPEC. ED. STU… Female    Katheri… 105    Hays Co… 13     Austin  
+##  3 KATHERI… SPEC. ED. STU… Not Bil/… Katheri… 105    Hays Co… 13     Austin  
+##  4 KATHERI… SPEC. ED. STU… Not Econ… Katheri… 105    Hays Co… 13     Austin  
+##  5 KATHERI… SPEC. ED. STU… Not At-R… Katheri… 105    Hays Co… 13     Austin  
+##  6 KATHERI… SPEC. ED. STU… Not Spec… Katheri… 105    Hays Co… 13     Austin  
+##  7 KATHERI… SPEC. ED. STU… Title1    Katheri… 105    Hays Co… 13     Austin  
+##  8 KATHERI… SPEC. ED. STU… Not CTE   Katheri… 105    Hays Co… 13     Austin  
+##  9 KATHERI… SPEC. ED. STU… Not Dysl… Katheri… 105    Hays Co… 13     Austin  
+## 10 KATHERI… SPEC. ED. STU… All Stud… Katheri… 105    Hays Co… 13     Austin  
+## # … with 56,911 more rows, and 9 more variables: Math &lt;chr&gt;, Total &lt;chr&gt;,
+## #   Grads_Mskd &lt;chr&gt;, Exnees_Mskd &lt;chr&gt;, Part_Rate &lt;chr&gt;, Crit_Mskd &lt;chr&gt;,
+## #   Above_Crit_Rate &lt;chr&gt;, TSI_Both_Mskd &lt;chr&gt;, Above_TSI_Both_Rate &lt;chr&gt;</code></pre>
+<pre class="r"><code>sat &lt;- newproject1 %&gt;% arrange(Total, desc()) 
+sat$Total &lt;- as.numeric(sat$Total)
+sat$Math &lt;- as.numeric(sat$Math)
+sat$reading &lt;- (sat$Total - sat$Math)
+glimpse(sat %&gt;% mutate(reading = Total-Math))</code></pre>
+<pre><code>## Rows: 56,921
+## Columns: 18
+## $ DISTNAME            &lt;chr&gt; &quot;GIDDINGS ISD&quot;, &quot;GIDDINGS ISD&quot;, &quot;GIDDINGS ISD&quot;, &quot;…
+## $ `HEADING NAME`      &lt;chr&gt; &quot;WHITE&quot;, &quot;NON SPEC. ED. EXPULSIONS&quot;, &quot;NON ECO. DI…
+## $ Ethnicity           &lt;chr&gt; &quot;Hispanic&quot;, &quot;Hispanic&quot;, &quot;Hispanic&quot;, &quot;Hispanic&quot;, &quot;…
+## $ DistName            &lt;chr&gt; &quot;Giddings ISD&quot;, &quot;Giddings ISD&quot;, &quot;Giddings ISD&quot;, &quot;…
+## $ County              &lt;chr&gt; &quot;144&quot;, &quot;144&quot;, &quot;144&quot;, &quot;144&quot;, &quot;144&quot;, &quot;144&quot;, &quot;144&quot;, …
+## $ CntyName            &lt;chr&gt; &quot;Lee County&quot;, &quot;Lee County&quot;, &quot;Lee County&quot;, &quot;Lee Co…
+## $ Region              &lt;chr&gt; &quot;13&quot;, &quot;13&quot;, &quot;13&quot;, &quot;13&quot;, &quot;13&quot;, &quot;13&quot;, &quot;13&quot;, &quot;13&quot;, &quot;…
+## $ RegnName            &lt;chr&gt; &quot;Austin&quot;, &quot;Austin&quot;, &quot;Austin&quot;, &quot;Austin&quot;, &quot;Austin&quot;,…
+## $ Math                &lt;dbl&gt; 505, 505, 505, 505, 505, 505, 505, 505, 505, 505,…
+## $ Total               &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1…
+## $ Grads_Mskd          &lt;chr&gt; &quot;&lt;75&quot;, &quot;&lt;75&quot;, &quot;&lt;75&quot;, &quot;&lt;75&quot;, &quot;&lt;75&quot;, &quot;&lt;75&quot;, &quot;&lt;75&quot;, …
+## $ Exnees_Mskd         &lt;chr&gt; &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, …
+## $ Part_Rate           &lt;chr&gt; &quot;31.8&quot;, &quot;31.8&quot;, &quot;31.8&quot;, &quot;31.8&quot;, &quot;31.8&quot;, &quot;31.8&quot;, &quot;…
+## $ Crit_Mskd           &lt;chr&gt; &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, …
+## $ Above_Crit_Rate     &lt;chr&gt; &quot;9.5&quot;, &quot;9.5&quot;, &quot;9.5&quot;, &quot;9.5&quot;, &quot;9.5&quot;, &quot;9.5&quot;, &quot;9.5&quot;, …
+## $ TSI_Both_Mskd       &lt;chr&gt; &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, &quot;&lt;25&quot;, …
+## $ Above_TSI_Both_Rate &lt;chr&gt; &quot;28.6&quot;, &quot;28.6&quot;, &quot;28.6&quot;, &quot;28.6&quot;, &quot;28.6&quot;, &quot;28.6&quot;, &quot;…
+## $ reading             &lt;dbl&gt; 495, 495, 495, 495, 495, 495, 495, 495, 495, 495,…</code></pre>
+<pre class="r"><code>newsat &lt;- sat %&gt;% pivot_wider(names_from = Ethnicity)
+
+sat %&gt;% summarise(mean(Math))</code></pre>
+<pre><code>##   mean(Math)
+## 1   538.4109</code></pre>
+<pre class="r"><code>sat %&gt;% summarise(mean(Total))</code></pre>
+<pre><code>##   mean(Total)
+## 1     1085.06</code></pre>
+<pre class="r"><code>sat %&gt;% summarise(mean(reading))</code></pre>
+<pre><code>##   mean(reading)
+## 1      546.6492</code></pre>
+<pre class="r"><code>groupt &lt;- sat %&gt;% select(Ethnicity, Total)
+groupm &lt;- sat %&gt;% select(Ethnicity, Math)
+groupr &lt;- sat %&gt;% select(Ethnicity, reading)
+sat %&gt;% summarise(sd(Total))</code></pre>
+<pre><code>##   sd(Total)
+## 1  114.4375</code></pre>
+<pre class="r"><code>sat %&gt;% summarise(sd(Math))</code></pre>
+<pre><code>##   sd(Math)
+## 1 58.32286</code></pre>
+<pre class="r"><code>sat %&gt;% summarise(sd(reading))</code></pre>
+<pre><code>##   sd(reading)
+## 1    57.80828</code></pre>
+<pre class="r"><code>sat %&gt;% select()</code></pre>
+<pre><code>## data frame with 0 columns and 56921 rows</code></pre>
+</div>
+</div>
+<div id="plots" class="section level2">
+<h2>Plots</h2>
+<div id="as-seen-below-in-the-heat-correlation-map-there-is-a-very-low-correlation-between-reading-and-math-sat-scores-taken-by-all-students.-this-could-mean-that-there-is-no-relationship-between-how-a-student-scores-on-one-portion-of-the-sat-versus-the-other.-there-is-an-expected-correlation-between-the-scores-for-both-sections-of-the-sat-and-the-total-score-because-the-total-is-made-up-of-the-combination-of-the-multiple-sections." class="section level5">
+<h5>As seen below in the heat correlation map, there is a very low correlation between reading and math SAT scores taken by all students. This could mean that there is no relationship between how a student scores on one portion of the SAT versus the other. There is an expected correlation between the scores for both sections of the SAT and the total score because the total is made up of the combination of the multiple sections.</h5>
+<pre class="r"><code>cormat &lt;- sat %&gt;% select_if(is.numeric) %&gt;% cor(use=&quot;pair&quot;)
+tidycor &lt;- cormat %&gt;% as.data.frame %&gt;% rownames_to_column(&quot;Variation1&quot;) %&gt;%    pivot_longer(-1,names_to=&quot;Variation2&quot;,values_to=&quot;correlation&quot;)
+library(&quot;ggplot2&quot;)
+tidycor %&gt;%ggplot(aes(Variation1,Variation2,fill=correlation)) + geom_tile()</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>new &lt;- sat %&gt;% filter(Ethnicity == &quot;Economically Disadvantaged&quot;)
+old &lt;- sat %&gt;% filter(Ethnicity == &quot;Not Economically Disadvantaged&quot;)
+plot &lt;- merge(new,old, by=&quot;Ethnicity&quot;)
+clean &lt;- groupm %&gt;% unique() %&gt;% select()
+
+ggplot(data = new, aes(x=Ethnicity, y=Math, color=DISTNAME)) + geom_boxplot() + ggtitle(&quot;Distibution of SAT Math Scores Among Economically Disadvantaged Districts&quot;) + xlab(&quot;Economic Standing&quot;) + ylab(&quot;SAT Math Scores&quot;) + theme_dark()</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<pre class="r"><code>ggplot(data = old, aes(x=Ethnicity, y=Math, color=DISTNAME)) + geom_boxplot(aes(color=DISTNAME)) + theme(legend.position = &#39;none&#39;) + ggtitle(&quot;Distiribution of SAT Math Scores Among Non-Economically Disadvantaged Districts&quot;) + xlab(&quot;Economic Standing&quot;) + ylab(&quot;SAT Math Scores&quot;) + scale_y_continuous(breaks=seq(0,700,100))</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-5-3.png" width="672" /></p>
+</div>
+<div id="in-the-boxplots-for-both-types-of-economic-standings-in-different-districts-it-can-be-seen-that-the-students-who-are-not-economically-disadvantaged-had-an-overall-higher-score-for-the-math-portion-of-the-sats.-this-is-an-expected-result-because-it-is-assumed-that-students-who-have-the-finacial-means-will-have-more-resources-available-to-them-to-score-better-while-students-who-are-less-fortunate-will-not-have-the-same-resources-in-order-to-succeed.-there-are-also-less-districts-listed-under-not-economiclly-disadvantages-which-is-not-a-good-sign-for-the-texas-education-region-13.-it-means-that-there-is-a-larger-portion-of-students-who-are-not-getting-the-education-they-need-due-to-the-simple-reason-of-being-in-the-wrong-place.-based-on-this-type-of-data-in-order-to-provide-the-same-quality-of-education-throughout-the-state-of-texas-every-single-resource-needs-to-be-made-available-to-have-students-on-the-same-playing-field-otherwise-it-is-setting-up-lower-income-students-for-failure." class="section level5">
+<h5>In the boxplots for both types of economic standings in different districts, it can be seen that the students who are not economically disadvantaged had an overall higher score for the math portion of the SATs. This is an expected result because it is assumed that students who have the finacial means will have more resources available to them to score better while students who are less fortunate will not have the same resources in order to succeed. There are also less districts listed under not economiclly disadvantages, which is not a good sign for the Texas Education region 13. It means that there is a larger portion of students who are not getting the education they need due to the simple reason of being in the wrong place. Based on this type of data, in order to provide the same quality of education throughout the state of Texas, every single resource needs to be made available to have students on the same playing field, otherwise it is setting up lower income students for failure.</h5>
+</div>
+</div>
+<div id="dimensionality-reduction" class="section level2">
+<h2>Dimensionality Reduction</h2>
+<div id="once-the-cluster-plots-were-made-it-can-be-seen-that-there-is-no-relationship-between-the-three-categories-but-they-are-very-similar-in-their-composition.-the-pam1-plot-showed-an-average-silhouette-width-of-0.71-which-indicates-a-strong-structure-between-the-three-numeric-variables.-in-addition-math-and-reading-portions-of-the-sat-had-highest-value-of-correlation-meaning-that-they-are-the-most-closely-related." class="section level5">
+<h5>Once the cluster plots were made, it can be seen that there is no relationship between the three categories, but they are very similar in their composition. The pam1 plot showed an average silhouette width of 0.71, which indicates a strong structure between the three numeric variables. In addition, math and reading portions of the SAT had highest value of correlation, meaning that they are the most closely related.</h5>
+<pre class="r"><code>library(&quot;GGally&quot;)</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;GGally&#39;:
+##   method from   
+##   +.gg   ggplot2</code></pre>
+<pre class="r"><code>library(&quot;cluster&quot;)
+set.seed(348)
+kmeans1 &lt;- sat %&gt;% select(Total, Math, reading) %&gt;% kmeans(4) 
+kmeans1$size</code></pre>
+<pre><code>## [1] 12931 28630  4043 11317</code></pre>
+<pre class="r"><code>kmeans1$centers</code></pre>
+<pre><code>##       Total     Math  reading
+## 1 1183.9082 587.1098 596.7984
+## 2 1074.6701 531.2998 543.3703
+## 3 1311.4452 659.2258 652.2194
+## 4  917.5229 457.5952 459.9277</code></pre>
+<pre class="r"><code>kmeansclust &lt;- sat %&gt;% mutate(cluster=as.factor(kmeans1$cluster))
+kmeansclust %&gt;% ggplot(aes(Total, Math, reading, color=cluster)) + geom_point()</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>half &lt;- sat %&gt;% slice(1:500)
+pam1 &lt;- half %&gt;% select(Total, Math, reading) %&gt;% scale() %&gt;% pam(k=4) 
+half %&gt;% mutate(cluster=as.factor(pam1$clustering)) %&gt;% 
+  ggpairs(columns = c(&quot;Total&quot;, &quot;Math&quot;, &quot;reading&quot;), aes(color=cluster))</code></pre>
+<pre><code>## Warning in cor(x, y): the standard deviation is zero
+
+## Warning in cor(x, y): the standard deviation is zero
+
+## Warning in cor(x, y): the standard deviation is zero</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+<pre class="r"><code>plot(pam1, k=2)</code></pre>
+<pre><code>## Warning in plot.window(...): &quot;k&quot; is not a graphical parameter</code></pre>
+<pre><code>## Warning in plot.xy(xy, type, ...): &quot;k&quot; is not a graphical parameter</code></pre>
+<pre><code>## Warning in axis(side = side, at = at, labels = labels, ...): &quot;k&quot; is not a
+## graphical parameter
+
+## Warning in axis(side = side, at = at, labels = labels, ...): &quot;k&quot; is not a
+## graphical parameter</code></pre>
+<pre><code>## Warning in box(...): &quot;k&quot; is not a graphical parameter</code></pre>
+<pre><code>## Warning in title(...): &quot;k&quot; is not a graphical parameter</code></pre>
+<pre><code>## Warning in polygon(z[[i]], density = if (shade) density[i] else 0, col =
+## col.clus, : &quot;k&quot; is not a graphical parameter
+
+## Warning in polygon(z[[i]], density = if (shade) density[i] else 0, col =
+## col.clus, : &quot;k&quot; is not a graphical parameter
+
+## Warning in polygon(z[[i]], density = if (shade) density[i] else 0, col =
+## col.clus, : &quot;k&quot; is not a graphical parameter
+
+## Warning in polygon(z[[i]], density = if (shade) density[i] else 0, col =
+## col.clus, : &quot;k&quot; is not a graphical parameter</code></pre>
+<pre><code>## Warning in plot.xy(xy.coords(x, y), type = type, ...): &quot;k&quot; is not a graphical
+## parameter
+
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): &quot;k&quot; is not a graphical
+## parameter
+
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): &quot;k&quot; is not a graphical
+## parameter
+
+## Warning in plot.xy(xy.coords(x, y), type = type, ...): &quot;k&quot; is not a graphical
+## parameter</code></pre>
+<pre><code>## Warning in segments(punt.1[1], punt.1[2], punt.2[1], punt.2[2], col = 6, : &quot;k&quot;
+## is not a graphical parameter
+
+## Warning in segments(punt.1[1], punt.1[2], punt.2[1], punt.2[2], col = 6, : &quot;k&quot;
+## is not a graphical parameter
+
+## Warning in segments(punt.1[1], punt.1[2], punt.2[1], punt.2[2], col = 6, : &quot;k&quot;
+## is not a graphical parameter
+
+## Warning in segments(punt.1[1], punt.1[2], punt.2[1], punt.2[2], col = 6, : &quot;k&quot;
+## is not a graphical parameter
+
+## Warning in segments(punt.1[1], punt.1[2], punt.2[1], punt.2[2], col = 6, : &quot;k&quot;
+## is not a graphical parameter
+
+## Warning in segments(punt.1[1], punt.1[2], punt.2[1], punt.2[2], col = 6, : &quot;k&quot;
+## is not a graphical parameter</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-6-3.png" width="672" /><img src="../../project/project1_files/figure-html/unnamed-chunk-6-4.png" width="672" /></p>
+</div>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../js/docs.min.js"></script>
+<script src="../../js/main.js"></script>
+
+<script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>
