@@ -203,7 +203,7 @@ rand_dist[i]&lt;-sd(new[new$var==&quot;wt&quot;,]$mass)-
 sd(new[new$var==&quot;ANU843&quot;,]$mass)
 }
 mean(rand_dist &lt; -13.24057 | rand_dist &gt; 13.24057 )</code></pre>
-<pre><code>## [1] 0</code></pre>
+<pre><code>## [1] 2e-04</code></pre>
 <pre class="r"><code>ggplot(new,aes(mass,fill=var))+geom_histogram()+facet_wrap(~var,ncol=2)</code></pre>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="../../project/project2_files/figure-html/unnamed-chunk-3-1.png" width="672" /> ## Linear Regression Model</p>
@@ -307,9 +307,9 @@ coef(fit1)
 })
 samp_distn %&gt;% t %&gt;% as.data.frame %&gt;% summarize_all(sd)</code></pre>
 <pre><code>##   (Intercept) trtNH4Cl trtNH4NO3 trtF10 +ANU843 trtNH4Cl +ANU843
-## 1    3.403149   3.7958  3.639373       3.475029         3.620554
+## 1    3.307668 3.704243  3.604108       3.362902         3.525857
 ##   trtNH4NO3 +ANU843 fertNH4Cl fertNH4NO3
-## 1          3.734818        NA         NA</code></pre>
+## 1          3.645509        NA         NA</code></pre>
 <pre class="r"><code>anova(fit1)</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
